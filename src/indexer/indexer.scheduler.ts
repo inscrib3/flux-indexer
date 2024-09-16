@@ -60,28 +60,20 @@ export class IndexScheduler implements OnModuleInit, OnModuleDestroy {
     const tokens = await this.indexerService.getAll();
     for (const token of tokens) {
       try {
-        const data = await this.leveldbService.get(
-          'd_' + token.ticker + '_' + token.id,
-        );
+        const data = await this.leveldbService.get('d_' + token.ticker + '_0');
         const ddd = JSON.parse(data);
         const deployment = JSON.parse(ddd.value);
         if (deployment.rem !== token.remaining) {
           this.logger.warn(
-            'Mismatch on remaining amount for token ' +
-              token.ticker +
-              ':' +
-              token.id,
+            'Mismatch on remaining amount for token ' + token.ticker,
           );
           await this.indexerService.updateRemaining(
             token.ticker,
-            token.id,
             deployment.rem,
           );
         }
       } catch (e) {
-        this.logger.error(
-          'Token ' + token.ticker + ':' + token.id + ' not found on leveldb',
-        );
+        this.logger.error('Token ' + token.ticker + ' not found on leveldb');
       }
     }
 

@@ -128,7 +128,7 @@ export class Indexer {
    * @param id
    * @returns {Promise<any|null>}
    */
-  async getDeployment(ticker: string, id: number) {
+  async getDeployment(ticker: string) {
     try {
       return JSON.parse(
         await this.db.get('d_' + ticker.toLowerCase() + '_' + 0),
@@ -146,16 +146,15 @@ export class Indexer {
    * @param id
    * @returns {Promise<{ticker, amt_big: string, decimals: *, amt, id}|null>}
    */
-  async getBalance(address: string, ticker: string, id: number) {
+  async getBalance(address: string, ticker: string) {
     try {
-      const deployment = await this.getDeployment(ticker, 0);
+      const deployment = await this.getDeployment(ticker);
       if (deployment !== null) {
         const address_amt =
           'a_' + address + '_' + ticker.toLowerCase() + '_' + 0;
         const amt = BigInt(await this.db.get(address_amt));
         return {
           ticker: deployment.tick,
-          id: deployment.id,
           decimals: deployment.dec,
           amt_big: amt.toString(),
           amt: cleanFloat(formatNumberString(amt.toString(), deployment.dec)),
@@ -387,10 +386,7 @@ export class Indexer {
                     const address_amt = 'a_' + to_address + '_' + sig;
 
                     const pair = sig.split('_');
-                    const deployment = await this.getDeployment(
-                      pair[0],
-                      parseInt(pair[1]),
-                    );
+                    const deployment = await this.getDeployment(pair[0]);
 
                     if (deployment === null) {
                       continue;
@@ -401,7 +397,6 @@ export class Indexer {
                       txid: tx.tx[i].txid,
                       vout: j,
                       tick: deployment?.tick,
-                      id: 0,
                       amt: spent_token_count[sig].toString(),
                     };
 
@@ -515,7 +510,7 @@ export class Indexer {
       if (transfer.includes('.') && transfer.endsWith('0')) return;
       if (transfer.endsWith('.')) return;
 
-      const deployment = await this.getDeployment(ticker, id);
+      const deployment = await this.getDeployment(ticker);
 
       if (deployment !== null) {
         if (countDecimals(transfer) > deployment.dec) return;
@@ -542,7 +537,6 @@ export class Indexer {
             txid: tx.txid,
             vout: output,
             tick: deployment.tick,
-            id: 0,
             amt: _transfer.toString(),
           };
 
@@ -686,7 +680,7 @@ export class Indexer {
     if (mint.includes('.') && mint.endsWith('0')) return;
     if (mint.endsWith('.')) return;
 
-    const deployment = await this.getDeployment(ticker, id);
+    const deployment = await this.getDeployment(ticker);
 
     if (deployment !== null) {
       if (countDecimals(mint) > deployment.dec) return;
@@ -733,7 +727,6 @@ export class Indexer {
           txid: tx.txid,
           vout: output,
           tick: deployment.tick,
-          id: 0,
           amt: _mint.toString(),
         };
 
@@ -810,7 +803,7 @@ export class Indexer {
       const ticker = toString26(int_ticker);
 
       // check if token already exists
-      if ((await this.getDeployment(ticker, id)) !== null) return;
+      if ((await this.getDeployment(ticker)) !== null) return;
 
       let max = '';
       let limit = '';
@@ -1102,7 +1095,6 @@ export class Indexer {
                     'c_' + collection_address + '_' + num1,
                     JSON.stringify({
                       tick: ticker,
-                      id: 0,
                       dec: decimals,
                       max: max,
                       lim: limit,
@@ -1141,7 +1133,6 @@ export class Indexer {
 
         const _deployment = {
           tick: ticker,
-          id: 0,
           dec: decimals,
           max: max,
           lim: limit,
@@ -1189,7 +1180,6 @@ export class Indexer {
               txid: tx.txid,
               vout: mint_to_beneficiary_output,
               tick: ticker,
-              id: 0,
               amt: _mint.toString(),
             };
 

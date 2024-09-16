@@ -26,19 +26,17 @@ export class IndexerService implements OnModuleInit {
     return await this.tokenModel.find().exec();
   }
 
-  async updateRemaining(ticker: string, id: number, remaining: string) {
+  async updateRemaining(ticker: string, remaining: string) {
     try {
-      const token = await this.tokenModel.findOne({ ticker, id }).exec();
+      const token = await this.tokenModel.findOne({ ticker }).exec();
       if (token) {
         token.remaining = remaining;
         await token.save();
       } else {
-        this.logger.error(`Token ${ticker}:${id} not found`);
+        this.logger.error(`Token ${ticker} not found`);
       }
     } catch (e) {
-      this.logger.error(
-        `Error occurred during update of token ${ticker}:${id}`,
-      );
+      this.logger.error(`Error occurred during update of token ${ticker}`);
       this.logger.error(e);
     }
   }
@@ -46,15 +44,11 @@ export class IndexerService implements OnModuleInit {
   async saveToken(tokenData: any) {
     try {
       const existingToken = await this.tokenModel
-        .findOne({ ticker: tokenData.ticker, id: tokenData.id })
+        .findOne({ ticker: tokenData.ticker })
         .exec();
 
       if (existingToken) {
-        await this.updateRemaining(
-          tokenData.ticker,
-          tokenData.id,
-          tokenData.remaining,
-        );
+        await this.updateRemaining(tokenData.ticker, tokenData.remaining);
         await existingToken.save();
       } else {
         tokenData.fid = this.fid;

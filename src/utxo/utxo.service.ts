@@ -23,14 +23,10 @@ export class UtxoService {
     return utxos;
   }
 
-  async getByToken(
-    ticker: string,
-    id: number,
-    pagination = null,
-  ): Promise<UtxoEntity[]> {
+  async getByToken(ticker: string, pagination = null): Promise<UtxoEntity[]> {
     const utxos = await findWithTotalCount(
       this.utxoModel,
-      { ticker, id: 0 },
+      { ticker },
       pagination,
     );
     return utxos;
@@ -60,12 +56,11 @@ export class UtxoService {
   async getByAddressTickerId(
     address: string,
     ticker: string,
-    id: number,
     pagination = null,
   ): Promise<UtxoEntity[]> {
     const utxos = await findWithTotalCount(
       this.utxoModel,
-      { address, ticker, id: 0 },
+      { address, ticker },
       pagination,
     );
     return utxos;

@@ -22,8 +22,8 @@ export class TokenService {
     return tokens;
   }
 
-  async get(ticker: string, id: number): Promise<TokenEntity> {
-    const token: any = await this.tokenModel.findOne({ ticker, id }).exec();
+  async get(ticker: string): Promise<TokenEntity> {
+    const token: any = await this.tokenModel.findOne({ ticker }).exec();
     if (token) return token;
     else throw new NotFoundException({ error: 'token not found' });
   }
@@ -95,13 +95,9 @@ export class TokenService {
     return tokens;
   }
 
-  async getBalance(
-    address: string,
-    ticker: string,
-    id: number,
-  ): Promise<TokenEntity> {
-    const token: any = await this.get(ticker, id);
-    const utxos = await this.utxoModel.find({ address, ticker, id }).exec();
+  async getBalance(address: string, ticker: string): Promise<TokenEntity> {
+    const token: any = await this.get(ticker);
+    const utxos = await this.utxoModel.find({ address, ticker }).exec();
     if (utxos.length === 0) {
       throw new NotFoundException({ error: 'token not found' });
     }
@@ -129,8 +125,7 @@ export class TokenService {
     const keys = Array.from(balanceMap.keys());
     const tokens = await Promise.all(
       keys.map(async (key) => {
-        const [ticker, id] = key.split('-');
-        const token: any = await this.get(ticker, Number(id));
+        const token: any = await this.get(key);
         token.amount = balanceMap.get(key)?.toString();
         return token;
       }),
@@ -139,9 +134,9 @@ export class TokenService {
     return tokens;
   }
 
-  async getHoldersByToken(ticker: string, id: number): Promise<string> {
+  async getHoldersByToken(ticker: string): Promise<string> {
     const balanceMap = new Map<string, bigint>();
-    const utxos = await this.utxoModel.find({ ticker, id: 0 }).exec();
+    const utxos = await this.utxoModel.find({ ticker }).exec();
     utxos.forEach((utxo: Utxo) => {
       const address = utxo.address;
       let balance = balanceMap.get(address) || 0n;
@@ -169,7 +164,7 @@ export class TokenService {
         string,
         { amount: bigint; decimals: number }
       >();
-      const utxos = await this.utxoModel.find({ ticker, id: token.id }).exec();
+      const utxos = await this.utxoModel.find({ ticker }).exec();
 
       utxos.forEach((utxo: Utxo) => {
         const address = utxo.address;
@@ -187,7 +182,7 @@ export class TokenService {
         amount: balance.amount.toString(),
       }));
 
-      allHolders.push({ id: token.id, holders });
+      allHolders.push({ holders });
     }
 
     return JSON.stringify(allHolders);

@@ -144,10 +144,9 @@ export class TokenController {
   @Get('/get-balance/:ticker/:address')
   async getBalanceByAddress(
     @Param('ticker', LowercasePipe) ticker: string,
-    @Param('id') id: number,
     @Param('address', LowercasePipe) address: string,
   ): Promise<TokenEntity> {
-    return await this.tokenService.getBalance(address, ticker, 0);
+    return await this.tokenService.getBalance(address, ticker);
   }
 
   @ApiOperation({ summary: 'Get all tokens held by a given address' })

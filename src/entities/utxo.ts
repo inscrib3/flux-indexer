@@ -28,10 +28,6 @@ export class UtxoEntity {
 
   @ApiProperty()
   @Expose()
-  id: number;
-
-  @ApiProperty()
-  @Expose()
   block: number;
 
   @ApiProperty()

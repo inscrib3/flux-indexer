@@ -66,7 +66,6 @@ export class UtxoController {
     return await this.utxoService.getByAddressTickerId(
       address,
       ticker,
-      0,
       pagination,
     );
   }
