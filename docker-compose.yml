@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: "mongo:latest"
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: username
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: flux
+    volumes:
+      - mongodb_data_container:/data/db
+
+  indexer:
+    container_name: flux-indexer
+    build: .
+    stop_signal: SIGTERM
+    stop_grace_period: 200s
+    environment:
+      BITCOIN_NODE_URL: "http://127.0.0.1:8332"
+      DATABASE_URL: "mongodb://username:password@mongo:27017/flux?authSource=admin"
+    depends_on:
+      mongo:
+        condition: service_started
+    volumes:
+      - flux_indexer_data_container:/usr/src/app
+    links:
+      - mongo
+
+  nginx:
+    image: jonasal/nginx-certbot:latest
+    container_name: nginx
+    restart: unless-stopped
+    environment:
+      CERTBOT_EMAIL: "email@domain.com"
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - nginx_secrets:/etc/letsencrypt
+      - ./nginx:/etc/nginx/user_conf.d
+    depends_on:
+      indexer:
+        condition: service_started
+    links:
+      - indexer
+    
+volumes:
+  flux_indexer_data_container:
+  mongodb_data_container:
+  nginx_secrets:
