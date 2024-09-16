@@ -6,7 +6,7 @@ Indexing Flux protocol tokens and related actions like transfers, deployments, m
 
 Duplicate `.env.example` and rename to `.env`.
 
-Update environment variables expecially Quick Node instance `BITCOIN_NODE_URL`.
+Update environment variables expecially Fractal Node instance `BITCOIN_NODE_URL`.
 
 Run the following command to start the indexer locally using docker
 
