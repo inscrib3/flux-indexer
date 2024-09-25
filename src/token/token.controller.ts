@@ -132,7 +132,12 @@ export class TokenController {
   @Get('/holders/:ticker')
   async getHoldersByTicker(
     @Param('ticker', LowercasePipe) ticker: string,
-  ): Promise<string> {
+  ): Promise<
+    {
+      address: string;
+      amount: string;
+    }[]
+  > {
     return await this.tokenService.getHoldersByTicker(ticker);
   }
 
