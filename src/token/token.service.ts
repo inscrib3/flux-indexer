@@ -152,7 +152,12 @@ export class TokenService {
     return JSON.stringify(holders);
   }
 
-  async getHoldersByTicker(ticker: string): Promise<string> {
+  async getHoldersByTicker(ticker: string): Promise<
+    {
+      address: string;
+      amount: string;
+    }[]
+  > {
     const tokens = await this.tokenModel.find({ ticker }).exec();
     if (tokens.length === 0) {
       throw new NotFoundException({ error: 'token not found' });
@@ -185,6 +190,6 @@ export class TokenService {
       allHolders.push({ holders });
     }
 
-    return JSON.stringify(allHolders);
+    return allHolders[0].holders;
   }
 }

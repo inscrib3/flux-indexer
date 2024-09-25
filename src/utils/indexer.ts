@@ -491,7 +491,9 @@ export class Indexer {
         ] !== 'undefined'
           ? this.op_table[('i_' + ops[i + 1]) as keyof typeof this.op_table]
           : parseInt(ops[i + 1], 16);
-      if (isNaN(id) || id !== 0) return;
+      if (isNaN(id) || id < 0 || id > 999999) return;
+
+      if (id !== 0) return;
 
       const output =
         ops[i + 2].startsWith('OP_') &&
@@ -549,7 +551,7 @@ export class Indexer {
           utxos.push(_utxo);
           outputs.push(output);
 
-          //console.log('1st push', _utxo);
+          console.log('1st push', _utxo);
         } catch (e) {
           this.logger.error(e);
         }
@@ -597,7 +599,7 @@ export class Indexer {
         }
       }
 
-      //console.log('2nd push', spent_token_count, token_count);
+      console.log('2nd push', spent_token_count, token_count);
 
       for (let i = 0; i < utxos.length; i++) {
         const sig = utxos[i].tick + '-' + utxos[i].id;
@@ -619,11 +621,11 @@ export class Indexer {
           await this.db.put(address_amt, amt.toString());
           await this.db.put(utxo, JSON.stringify(utxos[i]));
 
-          //console.log('3rd push', utxos[i]);
+          console.log('3rd push', utxos[i]);
         } catch (e) {
           await this.db.put(address_amt, utxos[i].amt);
           await this.db.put(utxo, JSON.stringify(utxos[i]));
-          //console.log('4th push', utxos[i]);
+          console.log('4th push', utxos[i]);
         }
       }
     }
@@ -664,6 +666,8 @@ export class Indexer {
         ? this.op_table['i_' + ops[4]]
         : parseInt(ops[4], 16);
     if (isNaN(id) || id < 0 || id > 999999) return;
+
+    if (id !== 0) return;
 
     const output =
       ops[5].startsWith('OP_') &&
@@ -742,7 +746,7 @@ export class Indexer {
           await this.db.put(address_amt, _utxo.amt);
         }
 
-        //console.log(await this.db.get(utxo));
+        console.log('mint', await this.db.get(utxo));
       } catch (e) {
         this.logger.error(e);
       }
@@ -780,6 +784,8 @@ export class Indexer {
           ? this.op_table['i_' + ops[4]]
           : parseInt(ops[4], 16);
       if (isNaN(id) || id < 0 || id > 999999) return;
+
+      if (id !== 0) return;
 
       const output =
         ops[5].startsWith('OP_') &&
@@ -1215,7 +1221,7 @@ export class Indexer {
           deployment,
         );
 
-        //console.log(await this.db.get(deployment));
+        console.log('deploy', await this.db.get(deployment));
       }
     } catch (e) {}
   }

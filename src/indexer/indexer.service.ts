@@ -58,7 +58,7 @@ export class IndexerService implements OnModuleInit {
       }
     } catch (e) {
       this.logger.error(
-        `Error occurred during save or update of token ${tokenData.ticker}:${tokenData.id}`,
+        `Error occurred during save or update of token ${tokenData.ticker}`,
       );
       this.logger.error(e);
     }
