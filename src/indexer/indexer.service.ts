@@ -80,7 +80,7 @@ export class IndexerService implements OnModuleInit {
         const newUtxo = new this.utxoModel(utxo);
         await newUtxo.save();
       } else {
-        this.logger.error(`Token ${data.tick}:${data.id} not found`);
+        this.logger.error(`Token ${data.tick} not found`);
       }
     } catch (e) {
       this.logger.error(`Error occurred when saving new utxo ${data.txid}`);

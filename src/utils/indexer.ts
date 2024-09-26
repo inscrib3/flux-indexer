@@ -284,7 +284,7 @@ export class Indexer {
               const old_utxo = JSON.parse(_utxo);
 
               const address_amt =
-                'a_' + old_utxo.addr + '_' + old_utxo.tick + '_' + old_utxo.id;
+                'a_' + old_utxo.addr + '_' + old_utxo.tick + '_0';
 
               try {
                 let amt = BigInt(await this.db.get(address_amt));
@@ -298,7 +298,7 @@ export class Indexer {
                 await this.db.del(utxo);
 
                 // in case needed later on to assign non-op_return transactions
-                const sig = old_utxo.tick + '_' + old_utxo.id;
+                const sig = old_utxo.tick + '_0';
 
                 if (the_sig === '') {
                   the_sig = sig;
@@ -569,7 +569,7 @@ export class Indexer {
           );
           spent_utxo = JSON.parse(spent_utxo);
 
-          const sig = spent_utxo.tick + '-' + spent_utxo.id;
+          const sig = spent_utxo.tick + '-0';
 
           if (typeof spent_token_count[sig] === 'undefined') {
             spent_token_count[sig] = 0n;
@@ -580,7 +580,7 @@ export class Indexer {
       }
 
       for (let i = 0; i < utxos.length; i++) {
-        const sig = utxos[i].tick + '-' + utxos[i].id;
+        const sig = utxos[i].tick + '-0';
 
         if (typeof token_count[sig] === 'undefined') {
           token_count[sig] = 0n;
@@ -602,7 +602,7 @@ export class Indexer {
       console.log('2nd push', spent_token_count, token_count);
 
       for (let i = 0; i < utxos.length; i++) {
-        const sig = utxos[i].tick + '-' + utxos[i].id;
+        const sig = utxos[i].tick + '-0';
 
         if (
           typeof spent_token_count[sig] === 'undefined' ||
@@ -612,8 +612,7 @@ export class Indexer {
         }
 
         const utxo = 'utxo_' + utxos[i].txid + '_' + utxos[i].vout;
-        const address_amt =
-          'a_' + utxos[i].addr + '_' + utxos[i].tick + '_' + utxos[i].id;
+        const address_amt = 'a_' + utxos[i].addr + '_' + utxos[i].tick + '_0';
 
         try {
           let amt = await this.db.get(address_amt);
