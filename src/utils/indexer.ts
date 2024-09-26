@@ -122,10 +122,9 @@ export class Indexer {
   }
 
   /**
-   * Returns the deployment data of a selected set of ticker and id.
+   * Returns the deployment data of a selected set of ticker.
    *
    * @param ticker
-   * @param id
    * @returns {Promise<any|null>}
    */
   async getDeployment(ticker: string) {
@@ -143,8 +142,7 @@ export class Indexer {
    *
    * @param address
    * @param ticker
-   * @param id
-   * @returns {Promise<{ticker, amt_big: string, decimals: *, amt, id}|null>}
+   * @returns {Promise<{ticker, amt_big: string, decimals: *, amt}|null>}
    */
   async getBalance(address: string, ticker: string) {
     try {
@@ -365,7 +363,7 @@ export class Indexer {
             }
           } else {
             // in case no valid op_return was given but utxos contained tokens,
-            // we try to associate all tokens of the first token type found (ticker:id)
+            // we try to associate all tokens of the first token type found (ticker)
             // of all inputs with the first output, that is not an op_return.
             // all other token types in inputs must be skipped.
 
@@ -631,7 +629,7 @@ export class Indexer {
   }
 
   /**
-   * Manages mints for the selected ticker:id in the op_return it is processing.
+   * Manages mints for the selected ticker in the op_return it is processing.
    *
    * @param block
    * @param blockhash
