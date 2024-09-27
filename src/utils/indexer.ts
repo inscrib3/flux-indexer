@@ -225,7 +225,7 @@ export class Indexer {
       } catch (e) {}
 
       try {
-        console.log(await this.db.get('reorg'));
+        // console.log(await this.db.get('reorg'));
         this.logger.warn('Reorg detected at block ' + (this.block - 1));
         return IndexerErrors.REORG;
       } catch (e) {}
@@ -549,7 +549,7 @@ export class Indexer {
           utxos.push(_utxo);
           outputs.push(output);
 
-          console.log('1st push', _utxo);
+          // console.log('1st push', _utxo);
         } catch (e) {
           this.logger.error(e);
         }
@@ -597,7 +597,7 @@ export class Indexer {
         }
       }
 
-      console.log('2nd push', spent_token_count, token_count);
+      // console.log('2nd push', spent_token_count, token_count);
 
       for (let i = 0; i < utxos.length; i++) {
         const sig = utxos[i].tick + '-0';
@@ -618,11 +618,11 @@ export class Indexer {
           await this.db.put(address_amt, amt.toString());
           await this.db.put(utxo, JSON.stringify(utxos[i]));
 
-          console.log('3rd push', utxos[i]);
+          // console.log('3rd push', utxos[i]);
         } catch (e) {
           await this.db.put(address_amt, utxos[i].amt);
           await this.db.put(utxo, JSON.stringify(utxos[i]));
-          console.log('4th push', utxos[i]);
+          // console.log('4th push', utxos[i]);
         }
       }
     }
@@ -743,7 +743,7 @@ export class Indexer {
           await this.db.put(address_amt, _utxo.amt);
         }
 
-        console.log('mint', await this.db.get(utxo));
+        // console.log('mint', await this.db.get(utxo));
       } catch (e) {
         this.logger.error(e);
       }
@@ -1218,7 +1218,7 @@ export class Indexer {
           deployment,
         );
 
-        console.log('deploy', await this.db.get(deployment));
+        // console.log('deploy', await this.db.get(deployment));
       }
     } catch (e) {}
   }
