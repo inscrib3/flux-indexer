@@ -231,7 +231,7 @@ export class Indexer {
       } catch (e) {}
 
       try {
-        // console.log(await this.db.get('reorg'));
+        console.log(await this.db.get('reorg'));
         this.logger.warn('Reorg detected at block ' + (this.block - 1));
         return IndexerErrors.REORG;
       } catch (e) {}
