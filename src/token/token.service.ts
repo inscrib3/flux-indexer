@@ -166,7 +166,6 @@ export class TokenService {
     const utxos = await this.utxoModel.find({ ticker }).exec();
 
     const holders = utxos.reduce((acc, cur) => {
-      console.log(cur);
       const index = acc.findIndex((item) => item.address === cur.address);
       if (index === -1) {
         acc.push({
@@ -181,7 +180,7 @@ export class TokenService {
       return acc;
     }, [] as { address: string; amount: string }[]);
 
-    console.log('holders');
+    console.log(holders[0]);
 
     return holders;
   }
