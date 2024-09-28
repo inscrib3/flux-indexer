@@ -11,7 +11,6 @@ import { UtxoEntity } from 'src/entities/utxo';
 @Controller('token')
 @UseInterceptors(PaginationInterceptor)
 @MongooseClassSerializerInterceptor(TokenEntity)
-@MongooseClassSerializerInterceptor(UtxoEntity)
 @ApiTags('token')
 export class TokenController {
   constructor(private readonly tokenService: TokenService) {}

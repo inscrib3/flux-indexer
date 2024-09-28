@@ -4,6 +4,10 @@ import { Expose } from 'class-transformer';
 export class TokenEntity {
   @ApiProperty()
   @Expose()
+  address: string;
+
+  @ApiProperty()
+  @Expose()
   fid: number;
 
   @ApiProperty()
