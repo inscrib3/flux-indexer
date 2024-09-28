@@ -6,6 +6,7 @@ import { TokenEntity } from 'src/entities/token';
 import { MongooseClassSerializerInterceptor } from 'src/interceptors/mongoose';
 import { PaginationInterceptor } from 'src/interceptors/pagination';
 import { LowercasePipe } from 'src/validation/lowercase';
+import { UtxoEntity } from 'src/entities/utxo';
 
 @Controller('token')
 @UseInterceptors(PaginationInterceptor)
@@ -127,7 +128,7 @@ export class TokenController {
   @ApiOperation({ summary: 'Get all the holders for a specific ticker' })
   @ApiResponse({
     status: 200,
-    type: String,
+    type: [UtxoEntity],
   })
   @Get('/holders/:ticker')
   async getHoldersByTicker(
