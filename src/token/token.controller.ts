@@ -128,7 +128,7 @@ export class TokenController {
   @ApiOperation({ summary: 'Get all the holders for a specific ticker' })
   @ApiResponse({
     status: 200,
-    type: [UtxoEntity],
+    type: String,
   })
   @Get('/holders/:ticker')
   async getHoldersByTicker(
@@ -139,7 +139,7 @@ export class TokenController {
       amount: string;
     }[]
   > {
-    return [{ address: 'address', amount: 'amount' }];
+    return await this.tokenService.getHoldersByTicker(ticker);
   }
 
   @ApiOperation({ summary: 'Get a specific token balance for a given address' })
