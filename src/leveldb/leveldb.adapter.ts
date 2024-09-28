@@ -92,4 +92,8 @@ export class LevelDBAdapter {
   public async close() {
     await this.db.close();
   }
+
+  public async open() {
+    await this.db.open();
+  }
 }

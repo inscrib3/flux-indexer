@@ -21,6 +21,10 @@ export class LevelDBService {
     await this.db.close();
   }
 
+  async open() {
+    await this.db.open();
+  }
+
   iterator() {
     return this.db.iterator();
   }
