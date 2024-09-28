@@ -139,7 +139,7 @@ export class TokenController {
       amount: string;
     }[]
   > {
-    return await this.tokenService.getHoldersByTicker(ticker);
+    return [{ address: 'address', amount: 'amount' }];
   }
 
   @ApiOperation({ summary: 'Get a specific token balance for a given address' })
