@@ -158,38 +158,26 @@ export class TokenService {
       amount: string;
     }[]
   > {
-    const tokens = await this.tokenModel.find({ ticker }).exec();
-    if (tokens.length === 0) {
+    const token = await this.tokenModel.find({ ticker }).exec();
+    if (token.length === 0) {
       throw new NotFoundException({ error: 'token not found' });
     }
 
-    const allHolders = [];
-    for (const token of tokens) {
-      const balanceMap = new Map<
-        string,
-        { amount: bigint; decimals: number }
-      >();
-      const utxos = await this.utxoModel.find({ ticker }).exec();
+    const utxos = await this.utxoModel.find({ ticker }).exec();
 
-      utxos.forEach((utxo: Utxo) => {
-        const address = utxo.address;
-        const balance = balanceMap.get(address) || {
-          amount: 0n,
-          decimals: utxo.decimals,
-        };
-
-        balance.amount += BigInt(utxo.amount);
-        balanceMap.set(address, balance);
-      });
-
-      const holders = Array.from(balanceMap, ([address, balance]) => ({
-        address,
-        amount: balance.amount.toString(),
-      }));
-
-      allHolders.push({ holders });
-    }
-
-    return allHolders[0].holders;
+    return utxos.reduce((acc, cur) => {
+      const index = acc.findIndex((item) => item.address === cur.address);
+      if (index === -1) {
+        acc.push({
+          address: cur.address,
+          amount: cur.amount,
+        });
+      } else {
+        acc[index].amount = (
+          BigInt(acc[index].amount) + BigInt(cur.amount)
+        ).toString();
+      }
+      return acc;
+    }, [] as { address: string; amount: string }[]);
   }
 }
