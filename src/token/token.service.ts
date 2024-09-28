@@ -180,7 +180,7 @@ export class TokenService {
       return acc;
     }, [] as { address: string; amount: string }[]);
 
-    console.log(holders[0]);
+    // console.log(holders[0]);
 
     return holders;
   }
