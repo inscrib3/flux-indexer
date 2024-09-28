@@ -102,6 +102,6 @@ export class LevelDBAdapter {
   }
 
   public status() {
-    return this.db.status;
+    return this.db.status();
   }
 }
