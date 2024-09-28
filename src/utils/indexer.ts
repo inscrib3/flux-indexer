@@ -81,7 +81,6 @@ export class Indexer {
   }
 
   async init() {
-    await this.db.close();
     try {
       this.logger.log('Indexer started');
       this.block = (await this.db.get('b')) + 1;
