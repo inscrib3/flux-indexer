@@ -181,7 +181,7 @@ export class TokenService {
       return acc;
     }, [] as { address: string; amount: string }[]);
 
-    console.log({ holders });
+    console.log({ holders: holders[0] });
 
     return holders;
   }
