@@ -11,6 +11,7 @@ import { UtxoEntity } from 'src/entities/utxo';
 @Controller('token')
 @UseInterceptors(PaginationInterceptor)
 @MongooseClassSerializerInterceptor(TokenEntity)
+@MongooseClassSerializerInterceptor(UtxoEntity)
 @ApiTags('token')
 export class TokenController {
   constructor(private readonly tokenService: TokenService) {}
@@ -133,8 +134,13 @@ export class TokenController {
   @Get('/holders/:ticker')
   async getHoldersByTicker(
     @Param('ticker', LowercasePipe) ticker: string,
-  ): Promise<any> {
-    return JSON.stringify(await this.tokenService.getHoldersByTicker(ticker));
+  ): Promise<
+    {
+      address: string;
+      amount: string;
+    }[]
+  > {
+    return await this.tokenService.getHoldersByTicker(ticker);
   }
 
   @ApiOperation({ summary: 'Get a specific token balance for a given address' })
