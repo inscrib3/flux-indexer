@@ -9,14 +9,16 @@ import { LevelDBService } from './leveldb.service';
     {
       provide: 'LEVELDB_CONNECTION',
       useFactory: async () => {
-        const db = new Level('data', { valueEncoding: 'json' });
-        console.log(db.location);
-        await db.close();
-        console.log('db close', db.location);
-        if (!db.supports.permanence) {
-          throw new Error('Persistent storage is required');
+        try {
+          const db = new Level('data', { valueEncoding: 'json' });
+          if (!db.supports.permanence) {
+            throw new Error('Persistent storage is required');
+          }
+          return db;
+        } catch (e) {
+          console.error(e);
+          throw e;
         }
-        return db;
       },
     },
     LevelDBService,
