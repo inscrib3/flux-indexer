@@ -96,4 +96,8 @@ export class LevelDBAdapter {
   public async open() {
     await this.db.open();
   }
+
+  public location() {
+    return this.db.location();
+  }
 }
