@@ -81,8 +81,9 @@ export class Indexer {
   }
 
   async init() {
+    console.log('location', this.db.location());
+    console.log('status', this.db.status());
     try {
-      console.log(this.db.location());
       this.logger.log('Indexer started');
       this.block = (await this.db.get('b')) + 1;
     } catch (e) {

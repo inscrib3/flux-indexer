@@ -100,4 +100,8 @@ export class LevelDBAdapter {
   public location() {
     return this.db.location();
   }
+
+  public status() {
+    return this.db.status;
+  }
 }

@@ -29,6 +29,10 @@ export class LevelDBService {
     return this.db.location;
   }
 
+  status() {
+    return this.db.status;
+  }
+
   iterator() {
     return this.db.iterator();
   }
