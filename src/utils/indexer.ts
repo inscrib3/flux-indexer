@@ -166,6 +166,8 @@ export class Indexer {
   async fixBlock() {
     const chain_block = await this.getChainBlock();
 
+    console.log(this.block, chain_block);
+
     if (chain_block > this.block) {
       this.block += 1;
     }
