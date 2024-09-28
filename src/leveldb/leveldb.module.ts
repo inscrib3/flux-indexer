@@ -13,8 +13,6 @@ import { LevelDBService } from './leveldb.service';
         console.log(db.location);
         await db.close();
         console.log('db close', db.location);
-        await db.open();
-        console.log('db open', db.location);
         if (!db.supports.permanence) {
           throw new Error('Persistent storage is required');
         }
